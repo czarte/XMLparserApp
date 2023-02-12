@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vítejte na {{ controller_name }}!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Vítejte na {{ controller_name }}! ✅</h1>
+
+    Vložte URL s odkazem na zip archiv souboru XML:
+    <form action="/xmlparser">
+        <label>
+            ukázkový soubor: https://www.retailys.cz/wp-content/uploads/astra_export_xml.zip
+            <input name="url" style="width: 100%">
+        </label>
+        <br>
+        <label>
+            Updatovat stažený soubor?
+            <input type="checkbox" name="update">
+        </label>
+        <br>
+        <label>
+            Zobrazit pouze počet produktů:
+            <input type="radio" name="showprompt" value="onlycount">
+        </label>
+        <br>
+        <label>
+            Zobrazit pouze seznam produktů:
+            <input type="radio" name="showprompt" value="onlylist">
+        </label>
+        <br>
+        <label>
+            Zobrazit u produktů jejich díly:
+            <input type="radio" name="showprompt" value="showparts">
+        </label>
+        <br>
+        <button>Odeslat</button>
+    </form>
+</div>
+
+{% endblock %}

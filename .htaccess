@@ -1,3 +1,4 @@
+php_value max_execution_time 3000
 # For a symfony application to work properly, you MUST store this .htaccess in
 # the same directory as your front controller, index.php, in a standard symfony
 # web application is under the "public" project subdirectory.
@@ -13,6 +14,10 @@ DirectoryIndex ./public/index.php
 # to the front controller "/index.php" but be rewritten to "/index.php/index".
 <IfModule mod_negotiation.c>
     Options -MultiViews
+</IfModule>
+
+<IfModule ssl_module>
+        Listen 443
 </IfModule>
 
 <IfModule mod_rewrite.c>
@@ -52,6 +57,9 @@ DirectoryIndex ./public/index.php
     RewriteCond %{ENV:REDIRECT_STATUS} =""
     RewriteRule ^index\.php(?:/(.*)|$) %{ENV:BASE}/$1 [R=301,L]
 
+    #RewriteCond %{HTTPS} !=on [NC]
+    #RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+    
     # If the requested filename exists, simply serve it.
     # Otherwise rewrite all other queries to the front controller.
     RewriteCond %{REQUEST_FILENAME} !-f
