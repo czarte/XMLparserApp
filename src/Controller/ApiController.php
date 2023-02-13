@@ -52,6 +52,8 @@ class ApiController extends AbstractController
                 break;
         }
 
+        if (!empty($request->query->get('url'))) return new Response(json_encode($response));
+
         return $this->render('project/parser.html.twig', $response);
     }
 }
