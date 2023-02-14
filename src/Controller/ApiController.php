@@ -20,12 +20,15 @@ class ApiController extends AbstractController
         $request = Request::createFromGlobals();
         $client = HttpClient::create();
         $fetchService = new Services\FetchService($client);
+        $backUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'];
         
         if (!empty($request->query->get('url'))) {
             $xmlFileConent = $fetchService->fetchXMLfFile($request->query->get('url'), $request->query->get('update'));
+            if (!$xmlFileConent['success'])
+                return new Response($xmlFileConent["message"]." <a href='$backUrl'>zpět</a>");
         } else {
-            $url = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['SERVER_NAME'];
-            return new Response("Zadejte url na zip soubor <a href='$url'>zpět</a>");
+            
+            return new Response("Zadejte url na zip soubor <a href='$backUrl'>zpět</a>");
         } 
 
         $entryKey = $xmlFileConent['entryName'];
@@ -52,7 +55,7 @@ class ApiController extends AbstractController
                 break;
         }
 
-        if (!empty($request->query->get('url'))) return new Response(json_encode($response));
+        if (!empty($request->query->get('api'))) return new Response(json_encode($response));
 
         return $this->render('project/parser.html.twig', $response);
     }

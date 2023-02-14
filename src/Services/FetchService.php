@@ -54,29 +54,26 @@ class FetchService
                 self::KEY_PROTOCOL,
                 $xmlUrl
             );
+            if ( $this->response->getStatusCode() !== self::STATUS )
+                return ["success" => false, "message" => 'Nepodařilo se stáhnout XML.'];
         }
 
-        if (!empty($this->response) && $this->response->getStatusCode() == self::STATUS || !$update) {
-            
-            $this->filesystem->mkdir($this->rootdir.'/tmp');
+        $this->filesystem->mkdir($this->rootdir.'/tmp');
 
-            if ($update) {
-                $contentType = $this->response->getHeaders()[self::KEY_CONTEN_TYPE][0];
-                $content = $this->response->getContent();
-                $this->filesystem->dumpFile($this->rootdir.'/tmp/'.$filename, $content);
-            }
-
+        if ($update) {
+            $content = $this->response->getContent();
+            $this->filesystem->dumpFile($this->rootdir.'/tmp/'.$filename, $content);
+        } else {
             $stream = fopen($this->rootdir.'/tmp/'.$filename, 'rb');
-
             $zipFile = new \PhpZip\ZipFile();
             $zipFile->openFromStream($stream);
             $zipFile->extractTo($this->rootdir.'/tmp/');
-            
-            if ($this->filesystem->exists([$this->rootdir.'/tmp/'.$xmlFilename]))
-                self::getXmlContent([$xmlUrl => file_get_contents($this->rootdir.'/tmp/'.$xmlFilename, 'rb')]);
-            else
-                self::getXmlContent(self::getZipContent($zipFile));   
         }
+
+        if ($this->filesystem->exists([$this->rootdir.'/tmp/'.$xmlFilename]))
+            self::getXmlContent([$xmlUrl => file_get_contents($this->rootdir.'/tmp/'.$xmlFilename, 'rb')]);
+        else
+            self::getXmlContent(self::getZipContent($zipFile));   
 
         return $this->result;
     }
