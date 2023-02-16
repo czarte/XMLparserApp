@@ -12,6 +12,7 @@ class FetchServiceTest extends TestCase
     {
         $client = HttpClient::create();
         $fetchService = new Services\FetchService($client);
+        
         $data = $fetchService->fetchXMLfFile('/test/export_one.xml.zip');
 
         $this->assertIsArray($data);

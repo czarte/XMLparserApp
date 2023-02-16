@@ -24,6 +24,7 @@ class FetchService
     const STATUS            = 200;
 
     private $client;
+    private $zipFile;
     private $filesystem;
     private $result;
     private $serializer;
